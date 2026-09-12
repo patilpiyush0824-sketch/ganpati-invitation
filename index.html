@@ -278,7 +278,6 @@ h1 {
 
     text-shadow:0 5px 20px rgba(141,33,27,.12);
 
-    animation:titleAnimation 1.1s cubic-bezier(.22,1,.36,1);
 }
 
 @keyframes titleAnimation {
@@ -291,6 +290,20 @@ h1 {
         opacity:1;
         transform:translateY(0) scale(1);
     }
+}
+
+
+.ganpati-title {
+    background: linear-gradient(90deg, #8d211b, #d99a28, #f7df91, #b53a25, #8d211b);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+}
+@keyframes titleShimmer {
+    0% { background-position: 300% center; }
+    100% { background-position: -300% center; }
 }
 
 /* ================= INVITATION BOX ================= */
@@ -1679,6 +1692,111 @@ body {
     }
 }
 
+
+
+/* Compact mobile event cards */
+.day-label {
+    margin: 0 0 4px;
+    font-size: 12px;
+    font-weight: 700;
+}
+.created-by {
+    display: inline-block;
+    background: linear-gradient(90deg, #8d211b, #d99a28, #8d211b, #f4d477, #8d211b);
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: creatorShimmer 3s linear infinite;
+}
+@keyframes creatorShimmer {
+    0% { background-position: 300% center; }
+    100% { background-position: -300% center; }
+}
+@media (max-width: 600px) {
+    .card-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+    }
+    .card {
+        padding: 10px 4px;
+        min-width: 0;
+    }
+    .card .icon { font-size: 20px; margin-bottom: 4px; }
+    .card h3 { font-size: 12px; line-height: 1.25; }
+    .card p { font-size: 10px; line-height: 1.3; }
+    .day-label { font-size: 9px !important; white-space: nowrap; }
+}
+
+/* Attractive scroll hint */
+.scroll-hint {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 18px;
+    color: var(--dark-red);
+    background: rgba(255,255,255,.16);
+    border: 1px solid rgba(141,33,27,.28);
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px rgba(141,33,27,.12);
+    animation: scrollHintFloat 2s ease-in-out infinite;
+    z-index: 5;
+}
+.scroll-hint span {
+    font-size: 11px;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+.scroll-hint b {
+    font-size: 25px;
+    line-height: 1;
+    font-weight: 700;
+    animation: scrollArrow 1.2s ease-in-out infinite;
+}
+.scroll-hint i {
+    width: 20px;
+    height: 30px;
+    border: 2px solid currentColor;
+    border-radius: 14px;
+    position: relative;
+}
+.scroll-hint i::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    width: 4px;
+    height: 7px;
+    border-radius: 5px;
+    background: currentColor;
+    transform: translateX(-50%);
+    animation: scrollDot 1.5s ease-in-out infinite;
+}
+@keyframes scrollArrow {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(7px); }
+}
+@keyframes scrollHintFloat {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-6px); }
+}
+@keyframes scrollDot {
+    0% { opacity: 0; transform: translate(-50%,0); }
+    40% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%,10px); }
+}
+@media (max-width:600px) {
+    .scroll-hint { bottom: 14px; padding: 8px 14px; }
+    .scroll-hint span { font-size: 10px; }
+}
+
 </style>
 </head>
 
@@ -1722,7 +1840,7 @@ body {
     </div>
 
 
-    <h1>
+    <h1 class="ganpati-title">
         गणपती आमंत्रण
     </h1>
 
@@ -1801,17 +1919,12 @@ body {
 
     </div>
 
-
-    <br>
-
-
-    <a class="cta" href="#details">
-        आमंत्रण पहा ↓
-    </a>
-
+    <div class="scroll-hint" aria-label="खाली स्क्रोल करा">
+        <span>खाली स्क्रोल करा</span>
+        <b aria-hidden="true">↓</b>
+    </div>
 
 </div>
-
 </header>
 
 
@@ -1861,6 +1974,7 @@ body {
             ⏰
         </div>
 
+        <p class="day-label">वार: बुधवार</p>
         <h3>
             सकाळी 09:30
         </h3>
@@ -1993,6 +2107,7 @@ body {
     <div class="event">
 
         <time>
+            वार: बुधवार<br>
             सकाळी : १०:००
         </time>
 
@@ -2004,8 +2119,7 @@ body {
 
             <br>
 
-            सत्यनारायण महापूजेचे
-            आयोजन करण्यात आले आहे.
+            सत्यनारायण महापूजेचे आयोजन करण्यात आले आहे.
 
         </div>
 
@@ -2021,7 +2135,7 @@ body {
 <div class="section-title">
 
     <span>
-        आवर्जून या
+        
     </span>
 
     <h2>
@@ -2317,6 +2431,20 @@ document
         }
     );
 
+</script>
+
+
+
+
+<script>
+const scrollHint = document.querySelector(".scroll-hint");
+function updateScrollHint() {
+    const atEnd = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 80;
+    if (scrollHint) scrollHint.style.opacity = atEnd ? "0" : "1";
+}
+window.addEventListener("scroll", updateScrollHint, { passive: true });
+window.addEventListener("resize", updateScrollHint);
+updateScrollHint();
 </script>
 
 </body>
