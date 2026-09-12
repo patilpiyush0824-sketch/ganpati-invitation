@@ -2448,28 +2448,25 @@ updateScrollHint();
 </script>
 
 
+
 <!-- ================= BACKGROUND MUSIC ================= -->
 <audio id="bgMusic" autoplay loop playsinline preload="auto" style="display:none;">
-  <source src="./ekadantaya-vakratundaya.m4a.m4am4a" type="audio/mp4">
+    <source src="./ekadantaya-vakratundaya.m4a" type="audio/mp4">
 </audio>
 
 <script>
 const bgMusic = document.getElementById("bgMusic");
 bgMusic.volume = 0.55;
 
-// Try automatic background playback.
-bgMusic.play().catch(() => {
-  // Browsers may block autoplay until the visitor interacts once.
-});
-
 function startBackgroundMusic() {
-  bgMusic.muted = false;
-  bgMusic.play().catch(() => {});
+    bgMusic.play().catch(() => {});
 }
 
-["click", "touchstart", "keydown", "scroll"].forEach(eventName => {
-  document.addEventListener(eventName, startBackgroundMusic, { once: true, passive: true });
-});
+window.addEventListener("load", startBackgroundMusic);
+document.addEventListener("click", startBackgroundMusic, { once: true });
+document.addEventListener("touchstart", startBackgroundMusic, { once: true, passive: true });
+document.addEventListener("keydown", startBackgroundMusic, { once: true });
 </script>
+
 </body>
 </html>
