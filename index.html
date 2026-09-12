@@ -1797,10 +1797,223 @@ body {
     .scroll-hint span { font-size: 10px; }
 }
 
+
+/* ================= TAP TO OPEN SCREEN ================= */
+#openingScreen {
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:25px;
+    background:
+        radial-gradient(circle at 50% 35%, rgba(247,216,137,.28), transparent 30%),
+        linear-gradient(180deg,#fffaf0,#fff1d2);
+    transition:opacity .7s ease, visibility .7s ease;
+}
+
+#openingScreen.hide {
+    opacity:1;
+    visibility:visible;
+    pointer-events:none;
+}
+
+/* ================= PREMIUM CURTAIN + TRANSPARENT RIPPLE OPENING ================= */
+
+/* Four translucent curtain panels: top, bottom, left, right */
+#openingScreen::before,
+#openingScreen::after {
+    content:"";
+    position:absolute;
+    z-index:0;
+    pointer-events:none;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.48), transparent 32%),
+        linear-gradient(135deg, rgba(255,250,240,.96), rgba(255,241,210,.94));
+    transition:transform 1s cubic-bezier(.77,0,.18,1),
+               opacity .9s ease;
+}
+
+#openingScreen::before {
+    inset:0;
+    width:50%;
+    height:100%;
+    border-right:1px solid rgba(228,167,44,.55);
+    transform:translateX(0);
+}
+
+#openingScreen::after {
+    right:0;
+    top:0;
+    width:50%;
+    height:100%;
+    border-left:1px solid rgba(228,167,44,.55);
+    transform:translateX(0);
+}
+
+/* Additional horizontal curtain layers */
+#openingScreen .opening-inner::before,
+#openingScreen .opening-inner::after {
+    content:"";
+    position:fixed;
+    left:0;
+    width:100%;
+    height:50%;
+    z-index:-1;
+    pointer-events:none;
+    background:
+        linear-gradient(180deg, rgba(255,250,240,.70), rgba(255,241,210,.64));
+    transition:transform 1s cubic-bezier(.77,0,.18,1),
+               opacity .9s ease;
+}
+
+#openingScreen .opening-inner::before {
+    top:0;
+    transform:translateY(-100%);
+}
+
+#openingScreen .opening-inner::after {
+    bottom:0;
+    transform:translateY(100%);
+}
+
+/* Transparent ripple rings spreading from the tap */
+#openingScreen.ripple::before {
+    animation:rippleFlash 1s ease-out forwards;
+}
+
+#openingScreen.ripple::after {
+    animation:rippleFlashRight 1s ease-out forwards;
+}
+
+/* Open vertically + horizontally */
+#openingScreen.hide::before {
+    transform:translateX(-100%);
+    opacity:.15;
+}
+
+#openingScreen.hide::after {
+    transform:translateX(100%);
+    opacity:.15;
+}
+
+#openingScreen.hide .opening-inner::before {
+    transform:translateY(-100%);
+    opacity:.15;
+}
+
+#openingScreen.hide .opening-inner::after {
+    transform:translateY(100%);
+    opacity:.15;
+}
+
+/* Ripple effect */
+#openingScreen .opening-inner::after {
+    box-shadow:0 0 0 0 rgba(228,167,44,0);
+}
+
+#openingScreen.ripple .opening-inner::after {
+    animation:rippleCircle 1s ease-out forwards;
+}
+
+@keyframes rippleCircle {
+    0% {
+        box-shadow:
+            0 0 0 0 rgba(228,167,44,.40),
+            0 0 0 0 rgba(255,255,255,.45);
+        border-radius:50%;
+    }
+    100% {
+        box-shadow:
+            0 0 0 45vw rgba(228,167,44,0),
+            0 0 0 70vw rgba(255,255,255,0);
+        border-radius:50%;
+    }
+}
+
+@keyframes rippleFlash {
+    0% { filter:brightness(1); }
+    35% { filter:brightness(1.14); }
+    100% { filter:brightness(1); }
+}
+
+@keyframes rippleFlashRight {
+    0% { filter:brightness(1); }
+    35% { filter:brightness(1.14); }
+    100% { filter:brightness(1); }
+}
+
+#openingScreen.hide .opening-inner {
+    opacity:0;
+    transform:scale(.92);
+    transition:opacity .38s ease, transform .5s ease;
+}
+
+.opening-inner {
+    position:relative;
+    z-index:2;
+    transition:opacity .35s ease, transform .45s ease;
+}
+
+#openingScreen.hide .opening-inner {
+    opacity:0;
+    transform:scale(.96);
+}
+
+.opening-inner {
+    width:min(520px,92vw);
+    padding:45px 25px;
+    border:2px solid rgba(228,167,44,.75);
+    border-radius:30px;
+    background:rgba(255,255,255,.88);
+    box-shadow:0 20px 60px rgba(75,36,21,.18);
+}
+
+.opening-om {
+    font-family:'Tiro Devanagari Marathi',serif;
+    color:var(--dark-red);
+    font-size:clamp(25px,7vw,42px);
+    font-weight:800;
+    margin-bottom:28px;
+}
+
+.opening-tap {
+    display:inline-block;
+    padding:15px 30px;
+    border:0;
+    border-radius:999px;
+    background:linear-gradient(135deg,var(--saffron),var(--dark-red));
+    color:#fff;
+    font-family:'Noto Sans Devanagari',sans-serif;
+    font-size:18px;
+    font-weight:800;
+    cursor:pointer;
+    box-shadow:0 12px 28px rgba(141,33,27,.25);
+    animation:openingPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes openingPulse {
+    0%,100% { transform:scale(1); }
+    50% { transform:scale(1.05); }
+}
+
 </style>
 </head>
 
 <body>
+
+<!-- ================= TAP TO OPEN ================= -->
+<div id="openingScreen">
+    <div class="opening-inner">
+        <div class="opening-om">ॐ श्री गणेशाय नमः</div>
+        <button id="tapToOpen" class="opening-tap">
+            🙏 Tap to Open 🙏
+        </button>
+    </div>
+</div>
+
 
 <nav>
 
@@ -2448,24 +2661,40 @@ updateScrollHint();
 </script>
 
 
-
 <!-- ================= BACKGROUND MUSIC ================= -->
-<audio id="bgMusic" autoplay loop playsinline preload="auto" style="display:none;">
+<audio id="bgMusic" loop playsinline preload="auto" style="display:none;">
     <source src="./ekadantaya-vakratundaya.m4a" type="audio/mp4">
 </audio>
 
 <script>
-const bgMusic = document.getElementById("bgMusic");
-bgMusic.volume = 0.55;
+(function () {
+    const openingScreen = document.getElementById("openingScreen");
+    const tapToOpen = document.getElementById("tapToOpen");
+    const music = document.getElementById("bgMusic");
 
-function startBackgroundMusic() {
-    bgMusic.play().catch(() => {});
-}
+    if (!openingScreen || !tapToOpen || !music) return;
 
-window.addEventListener("load", startBackgroundMusic);
-document.addEventListener("click", startBackgroundMusic, { once: true });
-document.addEventListener("touchstart", startBackgroundMusic, { once: true, passive: true });
-document.addEventListener("keydown", startBackgroundMusic, { once: true });
+    music.volume = 0.55;
+
+    tapToOpen.addEventListener("click", function () {
+        /* Main webpage open/show */
+        /* Ripple starts exactly on the same tap */
+        openingScreen.classList.add("ripple");
+
+        /* Music starts from the SAME user tap */
+        music.play().catch(function () {});
+
+        /* Then open with the vertical + horizontal curtain effect */
+        requestAnimationFrame(function () {
+            openingScreen.classList.add("hide");
+        });
+
+        /* Prevent opening screen from blocking the page */
+        setTimeout(function () {
+            openingScreen.style.display = "none";
+        }, 1050);
+    });
+})();
 </script>
 
 </body>
